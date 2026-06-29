@@ -1,4 +1,5 @@
 ---
+import PdfWindow from "../../components/PdfWindow.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { student, weeks, type Week } from "../../data/weeks";
 
@@ -17,12 +18,11 @@ type Props = {
 const { week, index } = Astro.props;
 const previous = weeks[index - 1];
 const next = weeks[index + 1];
-const progress = Math.round((week.number / weeks.length) * 100);
 ---
 
 <BaseLayout
-  title={`Semana ${week.number}: ${week.title} | ${student.course}`}
-  description={week.summary}
+  title={`${week.title} | ${student.course}`}
+  description={`Documentos de ${week.title}: PPT del profesor y trabajo realizado.`}
 >
   <header class="bg-ivory">
     <nav class="fixed left-0 right-0 top-0 z-40 border-b border-ink/10 bg-ivory/90 backdrop-blur-xl">
@@ -32,28 +32,22 @@ const progress = Math.round((week.number / weeks.length) * 100);
       </div>
     </nav>
 
-    <section class="mx-auto max-w-7xl px-5 pb-12 pt-28 sm:px-8">
+    <section class="week-hero mx-auto max-w-7xl px-5 pb-12 pt-28 sm:px-8">
       <div class="reveal max-w-4xl">
-        <p class="eyebrow">Semana {week.number} de {weeks.length}</p>
-        <h1 class="mt-5 text-4xl font-semibold leading-tight text-ink sm:text-6xl">{week.title}</h1>
-        <p class="mt-6 max-w-3xl text-lg leading-8 text-ink/70">{week.summary}</p>
-      </div>
-      <div class="reveal mt-10 overflow-hidden rounded bg-white shadow-soft">
-        <div class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-ink/70">
-          <span>Progreso del curso</span>
-          <span>{progress}%</span>
-        </div>
-        <div class="h-2 bg-ink/10">
-          <div class="h-full bg-burgundy" style={`width: ${progress}%`}></div>
-        </div>
+        <p class="eyebrow">Carpeta {week.folder}</p>
+        <h1>{week.title}</h1>
+        <p>
+          Esta semana muestra dos documentos: el PPT del profesor y el trabajo realizado.
+          Sube los archivos PDF en la carpeta indicada y el visor los cargará automáticamente.
+        </p>
       </div>
     </section>
   </header>
 
   <main class="bg-white">
-    <div class="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[280px_minmax(0,1fr)]">
+    <div class="mx-auto grid max-w-7xl gap-8 px-5 py-12 sm:px-8 lg:grid-cols-[240px_minmax(0,1fr)]">
       <aside class="weekly-sidebar reveal">
-        <p class="text-xs font-semibold uppercase text-ink/45">Índice del curso</p>
+        <p class="text-xs font-semibold uppercase text-ink/45">Semanas</p>
         <nav class="mt-4 grid gap-2" aria-label="Navegación por semanas">
           {weeks.map((item) => (
             <a
@@ -70,74 +64,18 @@ const progress = Math.round((week.number / weeks.length) * 100);
         </nav>
       </aside>
 
-      <article class="space-y-6">
-        <section class="reveal dossier-panel">
-          <p class="eyebrow">Pregunta guía</p>
-          <h2 class="mt-4 text-3xl font-semibold leading-tight text-ink">{week.guidingQuestion}</h2>
-        </section>
-
-        <section class="grid gap-6 xl:grid-cols-[1fr_0.85fr]">
-          <div class="reveal dossier-panel">
-            <div class="flex items-center justify-between gap-4">
-              <p class="eyebrow">Competencias</p>
-              <span class="area-pill">{week.area}</span>
-            </div>
-            <ul class="mt-6 grid gap-3">
-              {week.competencies.map((competency) => (
-                <li class="check-item">{competency}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div class="reveal dossier-panel">
-            <p class="eyebrow">Producto de la semana</p>
-            <h2 class="mt-4 text-2xl font-semibold leading-tight text-ink">{week.deliverable}</h2>
-            <p class="mt-5 text-sm leading-6 text-ink/68">{week.evidence}</p>
-          </div>
-        </section>
-
-        <section class="reveal dossier-panel">
-          <p class="eyebrow">Actividades sugeridas</p>
-          <div class="mt-6 grid gap-4 md:grid-cols-3">
-            {week.activities.map((activity, activityIndex) => (
-              <article class="activity-block">
-                <span>{String(activityIndex + 1).padStart(2, "0")}</span>
-                <p>{activity}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section class="reveal argument-map">
-          <div>
-            <p class="eyebrow">Estructura argumentativa</p>
-            <h2>Cómo se conecta esta semana con el expediente final</h2>
-          </div>
-          <div class="argument-grid">
-            <div>
-              <span>Problema</span>
-              <p>Delimitar la pregunta jurídica que debe resolverse.</p>
-            </div>
-            <div>
-              <span>Tesis</span>
-              <p>Plantear una respuesta defendible frente a objeciones.</p>
-            </div>
-            <div>
-              <span>Razones</span>
-              <p>Sostener la tesis con norma, principios, prueba y precedentes.</p>
-            </div>
-            <div>
-              <span>Cierre</span>
-              <p>Mostrar por qué la solución propuesta es la más razonable.</p>
-            </div>
-          </div>
+      <article class="document-workspace">
+        <section class="document-grid" aria-label={`Documentos de ${week.title}`}>
+          {week.documents.map((document) => (
+            <PdfWindow document={document} />
+          ))}
         </section>
 
         <nav class="reveal week-pagination" aria-label="Semana anterior y siguiente">
           {previous ? (
             <a href={`/semana/${previous.slug}/`}>
               <span>Anterior</span>
-              <strong>Semana {previous.number}: {previous.title}</strong>
+              <strong>{previous.title}</strong>
             </a>
           ) : (
             <a href="/">
@@ -149,7 +87,7 @@ const progress = Math.round((week.number / weeks.length) * 100);
           {next ? (
             <a href={`/semana/${next.slug}/`}>
               <span>Siguiente</span>
-              <strong>Semana {next.number}: {next.title}</strong>
+              <strong>{next.title}</strong>
             </a>
           ) : (
             <a href="/">

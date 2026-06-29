@@ -198,11 +198,36 @@
     line-height: 1.04;
   }
 
+  .week-hero h1 {
+    margin-top: 1.25rem;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 650;
+    line-height: 0.98;
+    color: var(--color-ink);
+  }
+
+  .week-hero p:not(.eyebrow) {
+    margin-top: 1.25rem;
+    max-width: 46rem;
+    color: rgb(32 32 31 / 0.7);
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+
+  .inline-code {
+    border-radius: 0.35rem;
+    background: rgb(255 255 255 / 0.1);
+    padding: 0.16rem 0.38rem;
+    color: white;
+    font-size: 0.95em;
+  }
+
   .route-card,
   .week-card,
   .method-card,
   .dossier-panel,
-  .activity-block {
+  .activity-block,
+  .source-card {
     border: 1px solid rgb(32 32 31 / 0.12);
     border-radius: 0.5rem;
   }
@@ -327,6 +352,24 @@
     color: var(--color-teal);
   }
 
+  .content-status,
+  .mini-tag {
+    width: fit-content;
+    border-radius: 999px;
+    border: 1px solid rgb(32 32 31 / 0.12);
+    background: rgb(255 255 255 / 0.62);
+    padding: 0.38rem 0.62rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: rgb(32 32 31 / 0.58);
+  }
+
+  .content-status.is-ready {
+    border-color: rgb(23 108 115 / 0.24);
+    background: rgb(23 108 115 / 0.1);
+    color: var(--color-teal);
+  }
+
   .method-card {
     background: rgb(255 255 255 / 0.08);
     padding: 1.25rem;
@@ -379,6 +422,71 @@
   .dossier-panel {
     background: #f8f8f5;
     padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .source-split {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .source-card {
+    min-height: 100%;
+    background: #f8f8f5;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .source-card:hover {
+    transform: translateY(-3px);
+    border-color: rgb(125 31 42 / 0.24);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .source-card h2 {
+    margin-top: 1rem;
+    font-size: clamp(1.45rem, 2.3vw, 2.05rem);
+    font-weight: 650;
+    line-height: 1.08;
+    text-wrap: balance;
+    color: var(--color-ink);
+  }
+
+  .source-overview {
+    margin-top: 1rem;
+    color: rgb(32 32 31 / 0.72);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .source-details {
+    margin-top: 1.3rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .source-details div {
+    border-left: 3px solid rgb(196 147 69 / 0.78);
+    background: white;
+    padding: 0.78rem 0.9rem;
+  }
+
+  .source-details dt {
+    font-size: 0.72rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    color: rgb(32 32 31 / 0.48);
+  }
+
+  .source-details dd {
+    margin-top: 0.24rem;
+    color: var(--color-ink);
+    font-size: 0.93rem;
+    font-weight: 650;
+    line-height: 1.35;
   }
 
   .check-item {
@@ -495,6 +603,242 @@
     display: block;
     line-height: 1.35;
   }
+
+  .document-workspace {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .document-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .pdf-window {
+    overflow: hidden;
+    border: 1px solid rgb(32 32 31 / 0.14);
+    border-radius: 0.5rem;
+    background: #f8f8f5;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .pdf-window-bar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgb(32 32 31 / 0.1);
+    background: linear-gradient(180deg, #fbfaf6 0%, #eee7dc 100%);
+    padding: 0.9rem 1rem;
+  }
+
+  .mac-dots {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .mac-dots span {
+    width: 0.78rem;
+    height: 0.78rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgb(32 32 31 / 0.12);
+  }
+
+  .mac-dots span:nth-child(1) {
+    background: #ef6a5f;
+  }
+
+  .mac-dots span:nth-child(2) {
+    background: #f5bd4f;
+  }
+
+  .mac-dots span:nth-child(3) {
+    background: #61c454;
+  }
+
+  .pdf-window-title {
+    min-width: 0;
+  }
+
+  .pdf-window-title p {
+    font-size: 0.72rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    color: var(--color-burgundy);
+  }
+
+  .pdf-window-title h2 {
+    margin-top: 0.2rem;
+    overflow: hidden;
+    color: var(--color-ink);
+    font-size: 1.1rem;
+    font-weight: 750;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pdf-actions {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .doc-action,
+  .pdf-controls button {
+    min-height: 2.2rem;
+    border: 1px solid rgb(32 32 31 / 0.13);
+    border-radius: 0.45rem;
+    background: rgb(255 255 255 / 0.72);
+    color: var(--color-ink);
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .doc-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .doc-action:hover,
+  .pdf-controls button:hover:not(:disabled) {
+    background: white;
+    color: var(--color-burgundy);
+  }
+
+  .pdf-window[data-state="missing"] .doc-action,
+  .pdf-controls button:disabled {
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .pdf-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    border-bottom: 1px solid rgb(32 32 31 / 0.08);
+    background: rgb(255 255 255 / 0.56);
+    padding: 0.7rem 1rem;
+  }
+
+  .pdf-meta span {
+    border-radius: 999px;
+    background: rgb(32 32 31 / 0.06);
+    padding: 0.38rem 0.62rem;
+    color: rgb(32 32 31 / 0.62);
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+
+  .pdf-stage {
+    position: relative;
+    display: grid;
+    min-height: 32rem;
+    place-items: center;
+    overflow: auto;
+    background:
+      linear-gradient(45deg, rgb(32 32 31 / 0.035) 25%, transparent 25%),
+      linear-gradient(-45deg, rgb(32 32 31 / 0.035) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgb(32 32 31 / 0.035) 75%),
+      linear-gradient(-45deg, transparent 75%, rgb(32 32 31 / 0.035) 75%);
+    background-color: #ece6dc;
+    background-position:
+      0 0,
+      0 8px,
+      8px -8px,
+      -8px 0;
+    background-size: 16px 16px;
+    padding: 1rem;
+  }
+
+  .pdf-stage canvas {
+    max-width: 100%;
+    border-radius: 0.2rem;
+    background: white;
+    box-shadow: 0 18px 42px rgb(32 32 31 / 0.18);
+  }
+
+  .pdf-loading,
+  .pdf-empty {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    max-width: 26rem;
+    border: 1px solid rgb(32 32 31 / 0.12);
+    border-radius: 0.5rem;
+    background: rgb(255 255 255 / 0.8);
+    padding: 1.5rem;
+    text-align: center;
+    color: rgb(32 32 31 / 0.66);
+  }
+
+  .pdf-loading span {
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 3px solid rgb(125 31 42 / 0.18);
+    border-top-color: var(--color-burgundy);
+    border-radius: 999px;
+    animation: spin 780ms linear infinite;
+  }
+
+  .pdf-empty p {
+    color: var(--color-burgundy);
+    font-size: 0.78rem;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  .pdf-empty strong {
+    color: var(--color-ink);
+    font-size: 1.25rem;
+  }
+
+  .pdf-empty code {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    border-radius: 0.35rem;
+    background: #f1eadf;
+    padding: 0.55rem;
+    color: var(--color-ink);
+    font-family:
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      Monaco,
+      Consolas,
+      "Liberation Mono",
+      "Courier New",
+      monospace;
+    font-size: 0.82rem;
+  }
+
+  .pdf-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    border-top: 1px solid rgb(32 32 31 / 0.09);
+    background: #fbfaf6;
+    padding: 0.8rem;
+  }
+
+  .pdf-controls button {
+    width: 2.5rem;
+    padding: 0;
+    font-size: 1.35rem;
+  }
+
+  .pdf-controls span {
+    min-width: 5.8rem;
+    text-align: center;
+    color: rgb(32 32 31 / 0.62);
+    font-size: 0.84rem;
+    font-weight: 850;
+  }
 }
 
 @layer utilities {
@@ -523,6 +867,7 @@
     position: relative;
     top: auto;
     max-height: none;
+    overflow: visible;
     border-right: 0;
     border-bottom: 1px solid rgb(32 32 31 / 0.1);
     padding-right: 0;
@@ -538,7 +883,9 @@
   }
 
   .argument-grid,
-  .week-pagination {
+  .week-pagination,
+  .source-split,
+  .document-grid {
     grid-template-columns: 1fr;
   }
 
@@ -546,6 +893,22 @@
   .button-secondary,
   .button-ghost {
     width: 100%;
+  }
+
+  .pdf-window-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .pdf-actions {
+    width: 100%;
+  }
+
+  .doc-action {
+    flex: 1;
+  }
+
+  .pdf-stage {
+    min-height: 24rem;
   }
 }
 
@@ -565,5 +928,11 @@
   .reveal {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

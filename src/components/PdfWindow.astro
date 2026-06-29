@@ -1,0 +1,201 @@
+---
+import type { CourseDocument } from "../data/weeks";
+
+type Props = {
+  document: CourseDocument;
+};
+
+const { document: courseDocument } = Astro.props;
+---
+
+<section
+  class="pdf-window reveal"
+  data-pdf-window
+  data-pdf-url={courseDocument.href}
+  data-expected-path={courseDocument.expectedPath}
+  data-state="loading"
+>
+  <header class="pdf-window-bar">
+    <div class="mac-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="pdf-window-title">
+      <p>{courseDocument.kind}</p>
+      <h2>{courseDocument.title}</h2>
+    </div>
+    <div class="pdf-actions">
+      <a class="doc-action" href={courseDocument.href} target="_blank" rel="noreferrer">Abrir</a>
+      <a class="doc-action" href={courseDocument.href} download>Descargar</a>
+    </div>
+  </header>
+
+  <div class="pdf-meta">
+    <span>{courseDocument.fileName}</span>
+    <span>{courseDocument.expectedPath}</span>
+  </div>
+
+  <div class="pdf-stage" data-pdf-stage>
+    <div class="pdf-loading" data-pdf-loading>
+      <span></span>
+      Cargando documento
+    </div>
+    <canvas data-pdf-canvas aria-label={`Vista previa de ${courseDocument.title}`}></canvas>
+    <div class="pdf-empty" data-pdf-empty hidden>
+      <p>Documento pendiente</p>
+      <strong>{courseDocument.fileName}</strong>
+      <span>Coloca el PDF en:</span>
+      <code>{courseDocument.expectedPath}</code>
+    </div>
+  </div>
+
+  <footer class="pdf-controls">
+    <button type="button" data-pdf-prev aria-label="Página anterior">‹</button>
+    <span data-pdf-page>-- / --</span>
+    <button type="button" data-pdf-next aria-label="Página siguiente">›</button>
+  </footer>
+</section>
+
+<script>
+  let pdfjsLoader: Promise<any> | null = null;
+
+  const loadPdfJs = async () => {
+    if (!pdfjsLoader) {
+      pdfjsLoader = Promise.all([
+        import("pdfjs-dist/build/pdf.mjs"),
+        import("pdfjs-dist/build/pdf.worker.mjs?url"),
+      ]).then(([pdfjsLib, workerModule]) => {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = workerModule.default;
+        return pdfjsLib;
+      });
+    }
+
+    return pdfjsLoader;
+  };
+
+  const setState = (root: HTMLElement, state: string) => {
+    root.dataset.state = state;
+  };
+
+  const renderPdfWindow = async (root: HTMLElement) => {
+    const url = root.dataset.pdfUrl;
+    const stage = root.querySelector("[data-pdf-stage]");
+    const canvas = root.querySelector("[data-pdf-canvas]");
+    const loading = root.querySelector("[data-pdf-loading]");
+    const empty = root.querySelector("[data-pdf-empty]");
+    const pageLabel = root.querySelector("[data-pdf-page]");
+    const prevButton = root.querySelector("[data-pdf-prev]");
+    const nextButton = root.querySelector("[data-pdf-next]");
+
+    if (
+      !url ||
+      !(stage instanceof HTMLElement) ||
+      !(canvas instanceof HTMLCanvasElement) ||
+      !(pageLabel instanceof HTMLElement) ||
+      !(prevButton instanceof HTMLButtonElement) ||
+      !(nextButton instanceof HTMLButtonElement)
+    ) {
+      return;
+    }
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    let pdf;
+    let currentPage = 1;
+    let rendering = false;
+
+    const showMissing = () => {
+      loading?.setAttribute("hidden", "");
+      canvas.setAttribute("hidden", "");
+      empty?.removeAttribute("hidden");
+      pageLabel.textContent = "-- / --";
+      prevButton.disabled = true;
+      nextButton.disabled = true;
+      setState(root, "missing");
+    };
+
+    const updateControls = () => {
+      pageLabel.textContent = `${currentPage} / ${pdf.numPages}`;
+      prevButton.disabled = currentPage <= 1;
+      nextButton.disabled = currentPage >= pdf.numPages;
+    };
+
+    const renderPage = async () => {
+      if (rendering) return;
+      rendering = true;
+
+      const page = await pdf.getPage(currentPage);
+      const baseViewport = page.getViewport({ scale: 1 });
+      const maxWidth = Math.max(280, stage.clientWidth - 32);
+      const fitScale = Math.min(maxWidth / baseViewport.width, 1.25);
+      const viewport = page.getViewport({ scale: fitScale });
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = Math.floor(viewport.width * dpr);
+      canvas.height = Math.floor(viewport.height * dpr);
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
+
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      context.clearRect(0, 0, viewport.width, viewport.height);
+
+      await page.render({ canvasContext: context, viewport }).promise;
+      updateControls();
+      rendering = false;
+    };
+
+    try {
+      const pdfjsLib = await loadPdfJs();
+      pdf = await Promise.race([
+        pdfjsLib.getDocument(url).promise,
+        new Promise((_, reject) => {
+          window.setTimeout(() => reject(new Error("PDF load timeout")), 20000);
+        }),
+      ]);
+      loading?.setAttribute("hidden", "");
+      empty?.setAttribute("hidden", "");
+      canvas.removeAttribute("hidden");
+      setState(root, "ready");
+      await renderPage();
+
+      prevButton.addEventListener("click", async () => {
+        if (currentPage <= 1) return;
+        currentPage -= 1;
+        await renderPage();
+      });
+
+      nextButton.addEventListener("click", async () => {
+        if (currentPage >= pdf.numPages) return;
+        currentPage += 1;
+        await renderPage();
+      });
+
+      window.addEventListener("resize", () => {
+        window.requestAnimationFrame(renderPage);
+      });
+    } catch (error) {
+      root.dataset.error = error instanceof Error ? error.message : String(error);
+      console.warn("PDF preview failed", url, error);
+      showMissing();
+    }
+  };
+
+  const bootPdfWindows = () => {
+    const windows = document.querySelectorAll("[data-pdf-window]");
+
+    windows.forEach((root) => {
+      if (!(root instanceof HTMLElement)) return;
+      if (root.dataset.initialized === "true") return;
+      root.dataset.initialized = "true";
+      renderPdfWindow(root);
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootPdfWindows, { once: true });
+  } else {
+    bootPdfWindows();
+  }
+</script>

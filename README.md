@@ -9,15 +9,23 @@ npm install
 npm run dev
 ```
 
-## Editar contenido
+## Subir documentos
 
-Las 16 semanas viven en:
+Cada semana muestra dos PDF:
+
+- `ppt-profesor.pdf`
+- `trabajo.pdf`
+
+Los archivos van en carpetas numeradas:
 
 ```text
-src/data/weeks.ts
+public/documentos/semana-01/ppt-profesor.pdf
+public/documentos/semana-01/trabajo.pdf
+public/documentos/semana-02/ppt-profesor.pdf
+public/documentos/semana-02/trabajo.pdf
 ```
 
-Cuando tengas la información real de cada semana, reemplaza `summary`, `guidingQuestion`, `competencies`, `activities`, `deliverable` y `evidence`.
+El visor usa PDF.js para renderizar los archivos dentro de una ventana propia estilo macOS. Si falta un PDF, se mostrará el mensaje "Documento pendiente" con la ruta esperada.
 
 ## Agregar foto
 
@@ -30,7 +38,6 @@ profileImage: "/images/nombre-de-la-foto.jpg",
 ## Comandos útiles
 
 ```bash
-npm run assets
 npm run build
 npm run preview
 ```

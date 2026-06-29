@@ -13,6 +13,7 @@
   "dependencies": {
     "@tailwindcss/vite": "latest",
     "astro": "5.18.2",
+    "pdfjs-dist": "^5.4.394",
     "tailwindcss": "latest"
   }
 }
