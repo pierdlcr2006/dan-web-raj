@@ -1,0 +1,19 @@
+---
+import { weeks } from "../data/weeks";
+
+const firstWeek = weeks[0];
+---
+
+<nav class="site-nav" aria-label="Navegación principal">
+  <div class="site-nav-inner">
+    <a href="/" class="site-brand">Argumentación jurídica</a>
+
+    <div class="site-nav-links">
+      <a class="nav-link" href="/">Inicio</a>
+      <a class="nav-link" href="/#semanas">Semanas</a>
+      <a class="nav-link" href="/#documentos">Documentos</a>
+    </div>
+
+    <a class="button-secondary site-nav-action" href={`/semana/${firstWeek.slug}/`}>Semana 1</a>
+  </div>
+</nav>

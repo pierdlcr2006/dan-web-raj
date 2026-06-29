@@ -1,8 +1,11 @@
 ---
+import SiteNav from "../components/SiteNav.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { courseStats, student, weeks } from "../data/weeks";
 
 const firstWeek = weeks[0];
+const lastWeek = weeks[weeks.length - 1];
+const documentSlots = weeks.length * 2;
 ---
 
 <BaseLayout
@@ -10,16 +13,7 @@ const firstWeek = weeks[0];
   description={`Presentación del curso ${student.course} con documentos por semana.`}
 >
   <header class="relative overflow-hidden bg-ivory">
-    <nav class="fixed left-0 right-0 top-0 z-40 border-b border-ink/10 bg-ivory/88 backdrop-blur-xl">
-      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
-        <a href="/" class="text-sm font-semibold uppercase text-burgundy">Argumentación jurídica</a>
-        <div class="hidden items-center gap-6 text-sm font-medium text-ink/70 md:flex">
-          <a class="nav-link" href="#semanas">Semanas</a>
-          <a class="nav-link" href="#documentos">Documentos</a>
-        </div>
-        <a class="button-secondary" href={`/semana/${firstWeek.slug}/`}>Empezar</a>
-      </div>
-    </nav>
+    <SiteNav />
 
     <section class="hero-shell mx-auto grid min-h-[88vh] max-w-7xl items-center gap-10 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,440px)]">
       <div class="relative z-10 max-w-3xl">
@@ -47,7 +41,7 @@ const firstWeek = weeks[0];
         </dl>
       </div>
 
-      <aside class="reveal profile-frame" aria-label="Perfil de estudiante">
+      <aside class="reveal profile-frame course-cover" aria-label="Perfil de estudiante">
         <div class="hero-portrait">
           <img src={student.profileImage} alt="Espacio para foto de Daniela Ariana Valer Alfaro" loading="eager" />
         </div>
@@ -57,6 +51,10 @@ const firstWeek = weeks[0];
           <p class="mt-4 text-sm leading-6 text-ink/70">
             Espacio preparado para incorporar su foto y revisar los documentos de cada semana.
           </p>
+        </div>
+        <div class="cover-note">
+          <span>{weeks.length} semanas</span>
+          <span>{documentSlots} espacios PDF</span>
         </div>
       </aside>
     </section>
@@ -70,48 +68,87 @@ const firstWeek = weeks[0];
   </header>
 
   <main>
-    <section id="semanas" class="section-band bg-parchment">
+    <section class="section-band bg-white">
       <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-        <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div class="reveal max-w-3xl">
-            <p class="eyebrow">Mapa semanal</p>
-            <h2 class="section-title mt-4">16 carpetas, dos documentos por semana</h2>
-            <p class="mt-5 text-lg leading-8 text-ink/70">
-              Sube cada PDF en su carpeta correspondiente. El visor los mostrará dentro de una ventana propia,
-              sin usar el visor clásico del navegador.
+        <div class="home-overview">
+          <article class="reveal overview-lead">
+            <p class="eyebrow">Panel del curso</p>
+            <h2>Una lectura clara para cada semana</h2>
+            <p>
+              El sitio funciona como un expediente académico: primero ubicas la semana,
+              luego revisas el material del profesor y después el trabajo realizado.
             </p>
-          </div>
+          </article>
 
-          <div class="reveal week-tools" aria-label="Buscar semanas">
-            <label class="sr-only" for="week-search">Buscar semana</label>
-            <input id="week-search" data-week-search type="search" placeholder="Buscar semana o carpeta" />
+          <div class="reveal overview-steps" aria-label="Flujo de revisión">
+            <div>
+              <span>01</span>
+              <strong>Elegir semana</strong>
+              <p>Acceso directo desde el índice compacto.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <strong>Revisar PPT</strong>
+              <p>Ventana PDF del material del profesor.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <strong>Comparar trabajo</strong>
+              <p>Segunda ventana con lo realizado.</p>
+            </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {weeks.map((week) => (
-            <a
-              class="reveal week-card"
-              href={`/semana/${week.slug}/`}
-              data-week-card
-              data-title={week.title}
-              data-summary={`${week.folder} ppt-profesor.pdf trabajo.pdf`}
-            >
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <span class="week-chip">{week.title}</span>
-                <span class="content-status is-ready">{week.folder}</span>
-              </div>
-              <h3 class="mt-5 text-xl font-semibold leading-snug text-ink">PPT profesor + trabajo</h3>
-              <p class="mt-4 text-sm leading-6 text-ink/66">
-                Carpeta: public/documentos/{week.folder}
+    <section id="semanas" class="section-band bg-parchment">
+      <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8">
+        <div class="section-heading-row">
+          <div class="reveal max-w-3xl">
+            <p class="eyebrow">Mapa semanal</p>
+            <h2 class="section-title mt-4">Acceso ordenado por semanas</h2>
+            <p class="mt-5 text-lg leading-8 text-ink/70">
+              Cada semana abre una sala de lectura con dos ventanas PDF: el PPT del profesor
+              y el trabajo realizado.
+            </p>
+          </div>
+          <a class="button-secondary reveal" href={`/semana/${lastWeek.slug}/`}>Ir a {lastWeek.title}</a>
+        </div>
+
+        <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+          <article class="reveal featured-week-panel">
+            <div>
+              <p class="eyebrow">Continuar revisión</p>
+              <h3>Semana 1</h3>
+              <p>
+                Empieza por la primera carpeta del curso y avanza con la navegación anterior/siguiente
+                dentro de cada semana.
               </p>
-              <div class="mt-auto flex flex-wrap gap-2 pt-6">
-                <span class="mini-tag">ppt-profesor.pdf</span>
-                <span class="mini-tag">trabajo.pdf</span>
+            </div>
+            <div class="featured-week-footer">
+              <a class="button-primary" href={`/semana/${firstWeek.slug}/`}>Abrir semana 1</a>
+              <span>{weeks.length} semanas disponibles</span>
+            </div>
+          </article>
+
+          <nav class="reveal week-selector" aria-label="Seleccionar semana">
+            <div class="week-selector-header">
+              <div>
+                <p class="eyebrow">Índice compacto</p>
+                <h3>Semanas del curso</h3>
               </div>
-              <span class="mt-5 inline-flex text-sm font-semibold text-burgundy">Abrir visor</span>
-            </a>
-          ))}
+              <span>{weeks.length} semanas</span>
+            </div>
+
+            <div class="week-compact-list">
+              {weeks.map((week) => (
+                <a class="week-pill-link" href={`/semana/${week.slug}/`}>
+                  <span>{String(week.number).padStart(2, "0")}</span>
+                  <strong>{week.title}</strong>
+                </a>
+              ))}
+            </div>
+          </nav>
         </div>
       </div>
     </section>
@@ -125,6 +162,19 @@ const firstWeek = weeks[0];
             Para cada semana usa la misma convención:
             <code class="inline-code">ppt-profesor.pdf</code> y <code class="inline-code">trabajo.pdf</code>.
           </p>
+        </div>
+
+        <div class="document-rule-list reveal mt-10">
+          <div>
+            <span>01</span>
+            <strong>PPT del profesor</strong>
+            <code>public/documentos/semana-XX/ppt-profesor.pdf</code>
+          </div>
+          <div>
+            <span>02</span>
+            <strong>Trabajo realizado</strong>
+            <code>public/documentos/semana-XX/trabajo.pdf</code>
+          </div>
         </div>
       </div>
     </section>

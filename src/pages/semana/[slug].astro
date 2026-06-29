@@ -1,5 +1,6 @@
 ---
 import PdfWindow from "../../components/PdfWindow.astro";
+import SiteNav from "../../components/SiteNav.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { student, weeks, type Week } from "../../data/weeks";
 
@@ -18,6 +19,7 @@ type Props = {
 const { week, index } = Astro.props;
 const previous = weeks[index - 1];
 const next = weeks[index + 1];
+const [professorDocument, workDocument] = week.documents;
 ---
 
 <BaseLayout
@@ -25,12 +27,7 @@ const next = weeks[index + 1];
   description={`Documentos de ${week.title}: PPT del profesor y trabajo realizado.`}
 >
   <header class="bg-ivory">
-    <nav class="fixed left-0 right-0 top-0 z-40 border-b border-ink/10 bg-ivory/90 backdrop-blur-xl">
-      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
-        <a href="/" class="text-sm font-semibold uppercase text-burgundy">Volver al mapa</a>
-        <a class="button-secondary" href="/#semanas">Todas las semanas</a>
-      </div>
-    </nav>
+    <SiteNav />
 
     <section class="week-hero mx-auto max-w-7xl px-5 pb-12 pt-28 sm:px-8">
       <div class="reveal max-w-4xl">
@@ -66,9 +63,20 @@ const next = weeks[index + 1];
 
       <article class="document-workspace">
         <section class="document-grid" aria-label={`Documentos de ${week.title}`}>
-          {week.documents.map((document) => (
-            <PdfWindow document={document} />
-          ))}
+          {professorDocument && <PdfWindow document={professorDocument} />}
+
+          <section class="weekly-product-card reveal" aria-label={`Producto de ${week.title}`}>
+            <div>
+              <p>Producto de la semana</p>
+              <h2>{week.title}</h2>
+            </div>
+            <p>
+              Evidencia académica elaborada durante la semana. Este producto conecta el contenido
+              explicado por el profesor con el trabajo presentado en el documento siguiente.
+            </p>
+          </section>
+
+          {workDocument && <PdfWindow document={workDocument} />}
         </section>
 
         <nav class="reveal week-pagination" aria-label="Semana anterior y siguiente">

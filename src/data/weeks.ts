@@ -17,10 +17,10 @@ export type Week = {
 export const student = {
   name: "Daniela Ariana Valer Alfaro",
   course: "Razonamiento y argumentación jurídica",
-  profileImage: "/images/profile-placeholder.png",
+  profileImage: "/images/profile-dan.jpeg",
 };
 
-const weekNames = Array.from({ length: 16 }, (_, index) => {
+const weekNames = Array.from({ length: 15 }, (_, index) => {
   const number = index + 1;
   return {
     number,
@@ -53,7 +53,7 @@ export const weeks: Week[] = weekNames.map((week) => ({
 }));
 
 export const courseStats = [
-  { label: "Semanas", value: "16" },
+  { label: "Semanas", value: "15" },
   { label: "Documentos", value: "PPT + trabajo" },
   { label: "Formato", value: "PDF" },
 ];

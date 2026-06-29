@@ -58,21 +58,10 @@ const { document: courseDocument } = Astro.props;
 </section>
 
 <script>
-  let pdfjsLoader: Promise<any> | null = null;
+  import * as pdfjsLib from "pdfjs-dist/build/pdf.mjs";
+  import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 
-  const loadPdfJs = async () => {
-    if (!pdfjsLoader) {
-      pdfjsLoader = Promise.all([
-        import("pdfjs-dist/build/pdf.mjs"),
-        import("pdfjs-dist/build/pdf.worker.mjs?url"),
-      ]).then(([pdfjsLib, workerModule]) => {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = workerModule.default;
-        return pdfjsLib;
-      });
-    }
-
-    return pdfjsLoader;
-  };
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
   const setState = (root: HTMLElement, state: string) => {
     root.dataset.state = state;
@@ -147,7 +136,6 @@ const { document: courseDocument } = Astro.props;
     };
 
     try {
-      const pdfjsLib = await loadPdfJs();
       pdf = await Promise.race([
         pdfjsLib.getDocument(url).promise,
         new Promise((_, reject) => {

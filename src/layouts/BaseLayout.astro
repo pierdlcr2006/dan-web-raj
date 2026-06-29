@@ -44,31 +44,6 @@ const {
         revealNodes.forEach((node) => node.classList.add("is-visible"));
       }
 
-      const weekSearch = document.querySelector("[data-week-search]");
-      const areaButtons = document.querySelectorAll("[data-area-filter]");
-      const weekCards = document.querySelectorAll("[data-week-card]");
-      let activeArea = "Todas";
-
-      const filterWeeks = () => {
-        const query = weekSearch?.value?.toLowerCase().trim() ?? "";
-
-        weekCards.forEach((card) => {
-          const matchesArea = activeArea === "Todas" || card.dataset.area === activeArea;
-          const text = `${card.dataset.title} ${card.dataset.summary}`.toLowerCase();
-          const matchesQuery = text.includes(query);
-          card.toggleAttribute("hidden", !(matchesArea && matchesQuery));
-        });
-      };
-
-      areaButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          activeArea = button.dataset.areaFilter ?? "Todas";
-          areaButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
-          filterWeeks();
-        });
-      });
-
-      weekSearch?.addEventListener("input", filterWeeks);
     </script>
   </body>
 </html>

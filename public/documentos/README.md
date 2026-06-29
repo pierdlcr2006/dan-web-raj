@@ -6,7 +6,7 @@ Cada semana tiene su propia carpeta:
 public/documentos/semana-01/
 public/documentos/semana-02/
 ...
-public/documentos/semana-16/
+public/documentos/semana-15/
 ```
 
 Dentro de cada carpeta coloca estos dos archivos:
