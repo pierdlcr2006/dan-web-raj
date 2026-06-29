@@ -4,8 +4,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { courseStats, student, weeks } from "../data/weeks";
 
 const firstWeek = weeks[0];
-const lastWeek = weeks[weeks.length - 1];
-const documentSlots = weeks.length * 2;
 ---
 
 <BaseLayout
@@ -17,7 +15,6 @@ const documentSlots = weeks.length * 2;
 
     <section class="hero-shell mx-auto grid min-h-[88vh] max-w-7xl items-center gap-10 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,440px)]">
       <div class="relative z-10 max-w-3xl">
-        <p class="reveal eyebrow">Curso de Derecho</p>
         <h1 class="reveal mt-5 max-w-5xl text-4xl font-semibold leading-[1.04] text-ink sm:text-6xl lg:text-7xl">
           Razonamiento y argumentación jurídica
         </h1>
@@ -27,7 +24,7 @@ const documentSlots = weeks.length * 2;
         </p>
 
         <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row">
-          <a class="button-primary" href="#semanas">Explorar semanas</a>
+          <a class="button-primary" href={`/semana/${firstWeek.slug}/`}>Explorar semanas</a>
           <a class="button-ghost" href={`/semana/${firstWeek.slug}/`}>Ver semana 1</a>
         </div>
 
@@ -48,13 +45,6 @@ const documentSlots = weeks.length * 2;
         <div class="mt-6">
           <p class="eyebrow">Presentado por</p>
           <h2 class="mt-3 text-3xl font-semibold leading-tight text-ink">{student.name}</h2>
-          <p class="mt-4 text-sm leading-6 text-ink/70">
-            Espacio preparado para incorporar su foto y revisar los documentos de cada semana.
-          </p>
-        </div>
-        <div class="cover-note">
-          <span>{weeks.length} semanas</span>
-          <span>{documentSlots} espacios PDF</span>
         </div>
       </aside>
     </section>
@@ -100,83 +90,17 @@ const documentSlots = weeks.length * 2;
         </div>
       </div>
     </section>
-
-    <section id="semanas" class="section-band bg-parchment">
-      <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-        <div class="section-heading-row">
-          <div class="reveal max-w-3xl">
-            <p class="eyebrow">Mapa semanal</p>
-            <h2 class="section-title mt-4">Acceso ordenado por semanas</h2>
-            <p class="mt-5 text-lg leading-8 text-ink/70">
-              Cada semana abre una sala de lectura con dos ventanas PDF: el PPT del profesor
-              y el trabajo realizado.
-            </p>
-          </div>
-          <a class="button-secondary reveal" href={`/semana/${lastWeek.slug}/`}>Ir a {lastWeek.title}</a>
-        </div>
-
-        <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-          <article class="reveal featured-week-panel">
-            <div>
-              <p class="eyebrow">Continuar revisión</p>
-              <h3>Semana 1</h3>
-              <p>
-                Empieza por la primera carpeta del curso y avanza con la navegación anterior/siguiente
-                dentro de cada semana.
-              </p>
-            </div>
-            <div class="featured-week-footer">
-              <a class="button-primary" href={`/semana/${firstWeek.slug}/`}>Abrir semana 1</a>
-              <span>{weeks.length} semanas disponibles</span>
-            </div>
-          </article>
-
-          <nav class="reveal week-selector" aria-label="Seleccionar semana">
-            <div class="week-selector-header">
-              <div>
-                <p class="eyebrow">Índice compacto</p>
-                <h3>Semanas del curso</h3>
-              </div>
-              <span>{weeks.length} semanas</span>
-            </div>
-
-            <div class="week-compact-list">
-              {weeks.map((week) => (
-                <a class="week-pill-link" href={`/semana/${week.slug}/`}>
-                  <span>{String(week.number).padStart(2, "0")}</span>
-                  <strong>{week.title}</strong>
-                </a>
-              ))}
-            </div>
-          </nav>
-        </div>
-      </div>
-    </section>
-
-    <section id="documentos" class="section-band bg-ink text-white">
-      <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-        <div class="reveal max-w-3xl">
-          <p class="eyebrow text-gold">Estructura de archivos</p>
-          <h2 class="section-title mt-4 text-white">Sube los PDF sin cambiar el código</h2>
-          <p class="mt-5 text-lg leading-8 text-white/72">
-            Para cada semana usa la misma convención:
-            <code class="inline-code">ppt-profesor.pdf</code> y <code class="inline-code">trabajo.pdf</code>.
-          </p>
-        </div>
-
-        <div class="document-rule-list reveal mt-10">
-          <div>
-            <span>01</span>
-            <strong>PPT del profesor</strong>
-            <code>public/documentos/semana-XX/ppt-profesor.pdf</code>
-          </div>
-          <div>
-            <span>02</span>
-            <strong>Trabajo realizado</strong>
-            <code>public/documentos/semana-XX/trabajo.pdf</code>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <p>2026 · {student.name}</p>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/daniela-v-b59386336/" target="_blank" rel="noreferrer" aria-label="LinkedIn de Daniela Ariana Valer Alfaro">
+          <img src="/images/linkedin.svg" alt="" aria-hidden="true" />
+        </a>
+        <p>Creado en colaboracion con PF</p>
+      </div>
+    </div>
+  </footer>
 </BaseLayout>

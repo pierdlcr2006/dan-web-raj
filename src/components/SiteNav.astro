@@ -2,6 +2,9 @@
 import { weeks } from "../data/weeks";
 
 const firstWeek = weeks[0];
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === "/";
+const isWeekRoute = currentPath.startsWith("/semana/");
 ---
 
 <nav class="site-nav" aria-label="Navegación principal">
@@ -9,11 +12,27 @@ const firstWeek = weeks[0];
     <a href="/" class="site-brand">Argumentación jurídica</a>
 
     <div class="site-nav-links">
-      <a class="nav-link" href="/">Inicio</a>
-      <a class="nav-link" href="/#semanas">Semanas</a>
-      <a class="nav-link" href="/#documentos">Documentos</a>
+      <a class:list={["nav-link", isHome && "is-active"]} href="/">Inicio</a>
+      <div class="nav-dropdown">
+        <a
+          class:list={["nav-link", isWeekRoute && "is-active"]}
+          href={`/semana/${firstWeek.slug}/`}
+          aria-haspopup="true"
+        >
+          Semanas
+        </a>
+        <div class="nav-week-menu" aria-label="Accesos directos por semana">
+          {weeks.map((week) => (
+            <a
+              class:list={[currentPath === `/semana/${week.slug}/` && "is-active"]}
+              href={`/semana/${week.slug}/`}
+            >
+              <span>{String(week.number).padStart(2, "0")}</span>
+              <strong>{week.title}</strong>
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
-
-    <a class="button-secondary site-nav-action" href={`/semana/${firstWeek.slug}/`}>Semana 1</a>
   </div>
 </nav>

@@ -31,11 +31,6 @@ const { document: courseDocument } = Astro.props;
     </div>
   </header>
 
-  <div class="pdf-meta">
-    <span>{courseDocument.fileName}</span>
-    <span>{courseDocument.expectedPath}</span>
-  </div>
-
   <div class="pdf-stage" data-pdf-stage>
     <div class="pdf-loading" data-pdf-loading>
       <span></span>
