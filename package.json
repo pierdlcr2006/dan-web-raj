@@ -1,0 +1,18 @@
+{
+  "name": "razonamiento-argumentacion-juridica",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0",
+    "astro": "astro",
+    "assets": "node scripts/create-assets.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "latest",
+    "astro": "5.18.2",
+    "tailwindcss": "latest"
+  }
+}
